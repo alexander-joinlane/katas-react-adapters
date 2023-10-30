@@ -1,11 +1,10 @@
 import { useState } from "react";
 import ClumsyDateInput from "../clumsy-components/DateInput";
-// import DateInput from "./DateInput";
 import DateInput from "../exercise/DateInput";
 import { Button } from "@mui/material";
 import { DateTime } from "luxon";
-// import ClumsyEnumSelector from "../clumsy-components/EnumSelector";
-// import EnumSelector from "./EnumSelector";
+import ClumsyEnumSelector from "../clumsy-components/EnumSelector";
+import EnumSelector from "./EnumSelector";
 import Color from "../enums/Color";
 
 type FormData = {
@@ -33,6 +32,8 @@ function Form({ onSubmit }: FormProps) {
     clumsyEnum: "Blue",
     enum: Color.enum.Red,
   });
+
+  console.log(37, { t: Color.Values });
 
   return (
     <form
@@ -70,7 +71,7 @@ function Form({ onSubmit }: FormProps) {
           }}
           color="red"
         />
-        {/* <DateInput
+        <DateInput
           value={form.dateA_NY}
           onChange={(v) => {
             setForm((prevForm) => ({
@@ -91,8 +92,8 @@ function Form({ onSubmit }: FormProps) {
           }}
           label={"DateInput (Asia/Kolkata)"}
           timeZone="Asia/Kolkata"
-        /> */}
-        {/* <ClumsyEnumSelector
+        />
+        <ClumsyEnumSelector
           value={form.clumsyEnum}
           onChange={(v) => {
             setForm((prevForm) => ({
@@ -110,8 +111,8 @@ function Form({ onSubmit }: FormProps) {
               enum: v,
             }));
           }}
-          options={Color.Values}
-        /> */}
+          optionEnum={Color}
+        />
       </div>
 
       <Button type="submit" variant="contained">

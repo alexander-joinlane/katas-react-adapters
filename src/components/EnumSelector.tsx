@@ -1,45 +1,33 @@
 import { useMemo } from "react";
 import ClumsyEnumSelector from "../clumsy-components/EnumSelector";
-import { EnumLike } from "zod";
+import { ZodEnum } from "zod";
 
-type Props<T extends EnumLike> = {
-  value: T;
-  onChange: (t: T) => void;
-  options: T[];
-  label?: string;
-};
-
-function isString<T extends EnumLike>(t: T | string): t is string {
-  return typeof t === "string";
-}
-
-function isEnum<T>(t: string | T, options: T[]): t is T {
-  return options.map(String).includes(t);
-}
-
-function EnumSelector<T extends EnumLike>({
+function EnumSelector<T extends ZodEnum<[string, ...string[]]>>({
   value,
   onChange,
-  options,
+  optionEnum,
   label = "EnumSelector",
-}: Props<T>) {
-  if (!isString(value)) {
-    throw new Error("Incompatible Enum");
-  }
-
-  function handleChange(v: string) {
-    if (isEnum(v, options)) {
-      onChange(v);
-    }
-  }
-
+}: {
+  value: keyof T["Values"];
+  onChange: (t: keyof T["Values"]) => void;
+  optionEnum: T;
+  label?: string;
+}) {
   const clumsyOptions: string[] = useMemo(() => {
-    return options.map(String);
-  }, [options]);
+    return Object.keys(optionEnum.Values).map(String);
+  }, [optionEnum]);
+
+  const clumsyValue = useMemo(() => {
+    return clumsyOptions.find((co) => co === value)!;
+  }, [clumsyOptions, value]);
+
+  function handleChange(cv: string) {
+    onChange(cv);
+  }
 
   return (
     <ClumsyEnumSelector
-      value={value}
+      value={clumsyValue}
       onChange={handleChange}
       options={clumsyOptions}
       label={label}
